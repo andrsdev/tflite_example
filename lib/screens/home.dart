@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tflite/tflite.dart';
 import 'package:tflite_example/components/picture_picker.dart';
+import 'package:tflite_example/models/result.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -14,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final ImagePicker _imagePicker = ImagePicker();
   File _selectedPicture;
+  Result _result;
 
   void pickImage(ImageSource source) async {
     PickedFile picked = await _imagePicker.getImage(source: source);
@@ -38,10 +41,39 @@ class _HomeState extends State<Home> {
     if(croppedImage != null && this.mounted){
       setState(() {
         this._selectedPicture = croppedImage;
-        // validateImageFile(croppedImage);
+        identifyImage(croppedImage);
       });
     }
   }
+
+  Future<void> identifyImage(File file) async {
+    await Tflite.loadModel(
+      model: "assets/tflite/model.tflite",
+      labels: "assets/tflite/labels.txt",
+      numThreads: 1
+    );
+
+    List<dynamic> recognitions = await Tflite.runModelOnImage(
+      path: file.path,
+      numResults: 1,
+      imageMean: 128,
+      imageStd: 128,
+    );
+
+    if(recognitions.isNotEmpty){
+      dynamic recognition = recognitions.first;
+      _result = Result(confidence: recognition['confidence']);
+
+      setState(() {
+        switch (recognition['index']) {
+          case 0: _result.name = 'Pikachu'; break;
+          case 1: _result.name = 'Squirtle'; break;
+          case 2: _result.name = 'Unidentified'; break;
+        }
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +97,39 @@ class _HomeState extends State<Home> {
               textAlign: TextAlign.start,
             ),
             Padding(
+              padding: const EdgeInsets.only(top: 18.0),
+              child: Text(
+                "Select a picture to indentify the pókemon!",
+                textAlign: TextAlign.start,
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.only(top: 36.0),
               child: PicturePicker(
                 imageFile: _selectedPicture,
                 shape: BoxShape.rectangle,
-                width: MediaQuery.of(context).size.width - 64,
+                width: MediaQuery.of(context).size.width - 56,
                 onTap: () => pickImage(ImageSource.gallery)
               ),
+            ),
+
+            if(_result != null)
+            Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(top: 28.0, bottom: 24),
+                  child: Divider(),
+                ),
+                Text(
+                  _result.name,
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                Text(
+                  '${(_result.confidence * 100).toStringAsFixed(2)} %',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                  
+              ],
             )
           ],
         ),
