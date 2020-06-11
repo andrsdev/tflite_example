@@ -125,11 +125,10 @@ class PicturePicker extends StatelessWidget {
 
   Widget buildPlaceholderImage(BuildContext context) {
     return Center(
-      child: Icon(
-        icon ?? Icons.photo_library,
-        size: width / 3,
-        color: Theme.of(context).accentColor,
-      ),
+      child: Image.asset(
+        'assets/img/pokeball.png',
+        fit: BoxFit.contain,
+      )
     );
   }
 }

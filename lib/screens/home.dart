@@ -17,9 +17,10 @@ class _HomeState extends State<Home> {
 
   void pickImage(ImageSource source) async {
     PickedFile picked = await _imagePicker.getImage(source: source);
-    File image = File(picked.path);
-    if(image != null)
+    if(picked != null) {
+      File image = File(picked.path);
       cropImage(image);
+    }
   }
 
   void cropImage(File image) async {
