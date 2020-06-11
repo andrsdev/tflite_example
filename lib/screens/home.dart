@@ -122,11 +122,46 @@ class _HomeState extends State<Home> {
             ),
 
             if(_result != null)
-            buildResult(context)
+              buildResult(context),
+
+            Spacer(),
+
+            buildFooter(context)
           ],
         ),
       ),
     );
+  }
+
+  SafeArea buildFooter(BuildContext context) {
+    return SafeArea(
+            child: Center(
+              child: RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  style: GoogleFonts.notoSans(
+                    textStyle: Theme.of(context).textTheme.caption,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: 'Built with '
+                    ),
+                    TextSpan(
+                      text: 'passion',
+                      style: Theme.of(context).textTheme.caption.copyWith(
+                        fontWeight: FontWeight.w700,
+                      )
+                    ),
+                    TextSpan(
+                      text: ' by Andrés Sanabria',
+                    ),
+                  ]
+                )
+              )
+              
+              // Text('Built with passion by Andres Sanabria')
+            )
+          );
   }
 
   Padding buildResult(BuildContext context) {
