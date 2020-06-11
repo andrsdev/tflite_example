@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
@@ -74,7 +75,6 @@ class _HomeState extends State<Home> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,17 +90,20 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Text(
               "Pokédex",
-              style: Theme.of(context).textTheme.headline4.copyWith(
-                color: Colors.black,
-                fontWeight: FontWeight.w700
+              style: GoogleFonts.notoSans(
+                textStyle: Theme.of(context).textTheme.headline4.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700
+                ),
               ),
               textAlign: TextAlign.start,
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 18.0),
+              padding: const EdgeInsets.only(top: 8.0, left: 2.0),
               child: Text(
                 "Select a picture to indentify the pókemon!",
                 textAlign: TextAlign.start,
+                style: GoogleFonts.notoSans(),
               ),
             ),
             Padding(
@@ -113,26 +116,49 @@ class _HomeState extends State<Home> {
               ),
             ),
 
+            Padding(
+              padding: const EdgeInsets.only(top: 28.0, bottom: 12),
+              child: Divider(),
+            ),
+
             if(_result != null)
-            Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 28.0, bottom: 24),
-                  child: Divider(),
-                ),
-                Text(
-                  _result.name,
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                Text(
-                  '${(_result.confidence * 100).toStringAsFixed(2)} %',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                  
-              ],
-            )
+            buildResult(context)
           ],
         ),
+      ),
+    );
+  }
+
+  Padding buildResult(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              _result.name,
+              style: GoogleFonts.notoSans(
+                textStyle: Theme.of(context).textTheme.headline5.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  height: 1,
+                ),
+              ),
+              // Theme.of(context).textTheme.headline5,
+            ),
+          ),
+          Text(
+            '${(_result.confidence * 100).toStringAsFixed(2)} %',
+            style: GoogleFonts.notoSans(
+              textStyle: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.grey[800],
+                fontWeight: FontWeight.w400,
+                height: 1,
+              ),
+            ),
+          ),   
+        ],
       ),
     );
   }
