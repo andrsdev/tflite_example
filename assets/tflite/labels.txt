@@ -1,0 +1,3 @@
+0 pikachu
+1 squirtle
+2 other
