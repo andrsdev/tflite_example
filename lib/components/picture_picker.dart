@@ -124,19 +124,12 @@ class PicturePicker extends StatelessWidget {
   }
 
   Widget buildPlaceholderImage(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Icon(
-          icon ?? Icons.photo_library,
-          size: width / 3,
-          color: Theme.of(context).accentColor,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Text('Select'),
-        )
-      ],
+    return Center(
+      child: Icon(
+        icon ?? Icons.photo_library,
+        size: width / 3,
+        color: Theme.of(context).accentColor,
+      ),
     );
   }
 }

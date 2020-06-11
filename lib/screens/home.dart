@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Text(
-              "Pick an image",
+              "Pokédex",
               style: Theme.of(context).textTheme.headline4.copyWith(
                 color: Colors.black,
                 fontWeight: FontWeight.w700
