@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
     PickedFile picked = await _imagePicker.getImage(source: source);
     if(picked != null) {
       File image = File(picked.path);
-      cropImage(image);
+      // cropImage(image);
     }
   }
 
