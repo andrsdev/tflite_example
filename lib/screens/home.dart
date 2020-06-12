@@ -23,7 +23,7 @@ class _HomeState extends State<Home> {
     PickedFile picked = await _imagePicker.getImage(source: source);
     if(picked != null) {
       File image = File(picked.path);
-      // cropImage(image);
+      cropImage(image);
     }
   }
 
@@ -135,31 +135,35 @@ class _HomeState extends State<Home> {
 
   SafeArea buildFooter(BuildContext context) {
     return SafeArea(
-            child: Center(
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: GoogleFonts.notoSans(
-                    textStyle: Theme.of(context).textTheme.caption,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: 'Built with '
+            top: false,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: Platform.isAndroid ? 28 : 0),
+              child: Center(
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: GoogleFonts.notoSans(
+                      textStyle: Theme.of(context).textTheme.caption,
                     ),
-                    TextSpan(
-                      text: 'passion',
-                      style: Theme.of(context).textTheme.caption.copyWith(
-                        fontWeight: FontWeight.w700,
-                      )
-                    ),
-                    TextSpan(
-                      text: ' by Andrés Sanabria',
-                    ),
-                  ]
+                    children: [
+                      TextSpan(
+                        text: 'Built with '
+                      ),
+                      TextSpan(
+                        text: 'passion',
+                        style: Theme.of(context).textTheme.caption.copyWith(
+                          fontWeight: FontWeight.w700,
+                        )
+                      ),
+                      TextSpan(
+                        text: ' by Andrés Sanabria',
+                      ),
+                    ]
+                  )
                 )
-              )
-              
-              // Text('Built with passion by Andres Sanabria')
+                
+                // Text('Built with passion by Andres Sanabria')
+              ),
             )
           );
   }
