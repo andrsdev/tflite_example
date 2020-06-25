@@ -1,9 +1,16 @@
-class Result {
-  String name;
+class PokeResult {
+  String label;
   double confidence;
 
-  Result({
-    this.name,
+  PokeResult({
+    this.label,
     this.confidence,
   });
+
+  factory PokeResult.fromMap(Map data){
+    return PokeResult(
+      label: data['label'],
+      confidence: data['confidence'],
+    );
+  }
 }
