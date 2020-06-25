@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tflite/tflite.dart';
+import 'package:tflite_example/components/footer.dart';
 import 'package:tflite_example/components/picture_picker.dart';
 import 'package:tflite_example/models/result.dart';
 
@@ -17,7 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final ImagePicker _imagePicker = ImagePicker();
   File _selectedPicture;
-  Result _result;
+  PokeResult _result;
 
   void pickImage(ImageSource source) async {
     PickedFile picked = await _imagePicker.getImage(source: source);
@@ -62,15 +62,8 @@ class _HomeState extends State<Home> {
     );
 
     if(recognitions.isNotEmpty){
-      dynamic recognition = recognitions.first;
-      _result = Result(confidence: recognition['confidence']);
-
       setState(() {
-        switch (recognition['index']) {
-          case 0: _result.name = 'Pikachu'; break;
-          case 1: _result.name = 'Squirtle'; break;
-          case 2: _result.name = 'Unidentified'; break;
-        }
+        _result = PokeResult.fromMap(recognitions.first);
       });
     }
   }
@@ -90,11 +83,9 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Text(
               "Pokédex",
-              style: GoogleFonts.notoSans(
-                textStyle: Theme.of(context).textTheme.headline4.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700
-                ),
+              style: Theme.of(context).textTheme.headline4.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.w700
               ),
               textAlign: TextAlign.start,
             ),
@@ -103,7 +94,6 @@ class _HomeState extends State<Home> {
               child: Text(
                 "Select a picture to indentify the pókemon!",
                 textAlign: TextAlign.start,
-                style: GoogleFonts.notoSans(),
               ),
             ),
             Padding(
@@ -125,47 +115,11 @@ class _HomeState extends State<Home> {
               buildResult(context),
 
             Spacer(),
-
-            buildFooter(context)
+            Footer(),
           ],
         ),
       ),
     );
-  }
-
-  SafeArea buildFooter(BuildContext context) {
-    return SafeArea(
-            top: false,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: Platform.isAndroid ? 28 : 0),
-              child: Center(
-                child: RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: GoogleFonts.notoSans(
-                      textStyle: Theme.of(context).textTheme.caption,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Built with '
-                      ),
-                      TextSpan(
-                        text: 'passion',
-                        style: Theme.of(context).textTheme.caption.copyWith(
-                          fontWeight: FontWeight.w700,
-                        )
-                      ),
-                      TextSpan(
-                        text: ' by Andrés Sanabria',
-                      ),
-                    ]
-                  )
-                )
-                
-                // Text('Built with passion by Andres Sanabria')
-              ),
-            )
-          );
   }
 
   Padding buildResult(BuildContext context) {
@@ -176,25 +130,20 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           Expanded(
             child: Text(
-              _result.name,
-              style: GoogleFonts.notoSans(
-                textStyle: Theme.of(context).textTheme.headline5.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w700,
-                  height: 1,
-                ),
+              _result.label,
+              style: Theme.of(context).textTheme.headline5.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+                height: 1,
               ),
-              // Theme.of(context).textTheme.headline5,
             ),
           ),
           Text(
             '${(_result.confidence * 100).toStringAsFixed(2)} %',
-            style: GoogleFonts.notoSans(
-              textStyle: Theme.of(context).textTheme.headline6.copyWith(
-                color: Colors.grey[800],
-                fontWeight: FontWeight.w400,
-                height: 1,
-              ),
+            style: Theme.of(context).textTheme.headline6.copyWith(
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w400,
+              height: 1,
             ),
           ),   
         ],
@@ -202,3 +151,4 @@ class _HomeState extends State<Home> {
     );
   }
 }
+

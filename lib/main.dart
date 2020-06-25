@@ -11,11 +11,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Pokédex',
       theme: ThemeData(
         backgroundColor: Colors.white,
         primarySwatch: Colors.cyan,
-        visualDensity: VisualDensity.adaptivePlatformDensity
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'NotoSans',
       ),
       home: Home(),
     );
